@@ -584,7 +584,8 @@ function CreatorPromptComposer({
 
 // ─── Main Communication Page Container ────────────────────────────────────────
 
-function CommunicationContent({ slug }: { slug: string }) {
+function CommunicationContent({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
   const router = useRouter();
   const { user, isLoading } = useAuth();
 
@@ -1119,8 +1120,6 @@ export default function CommunicationPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = use(params);
-
   return (
     <Suspense
       fallback={
@@ -1131,7 +1130,7 @@ export default function CommunicationPage({
         </div>
       }
     >
-      <CommunicationContent slug={slug} />
+      <CommunicationContent params={params} />
     </Suspense>
   );
 }

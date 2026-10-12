@@ -1,13 +1,13 @@
 'use client';
 
-import { use, useState, useEffect } from 'react';
+import { use, useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../lib/auth';
 import { sessionApi } from '../../../lib/api';
 import type { Session } from '../../../types/qa';
 import { Heart, Users, Link2, Loader2, LogIn, CheckCircle, AlertCircle } from 'lucide-react';
 
-export default function JoinPage({ params }: { params: Promise<{ slug: string }> }) {
+function JoinContent({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const router = useRouter();
   const { user, isLoading: authLoading } = useAuth();
@@ -214,5 +214,19 @@ export default function JoinPage({ params }: { params: Promise<{ slug: string }>
         </p>
       </div>
     </div>
+  );
+}
+
+export default function JoinPage({ params }: { params: Promise<{ slug: string }> }) {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#fbf8f3] flex items-center justify-center">
+          <Loader2 className="w-6 h-6 text-[#4f3f35]/40 animate-spin" />
+        </div>
+      }
+    >
+      <JoinContent params={params} />
+    </Suspense>
   );
 }
