@@ -1,0 +1,103 @@
+services:
+  web:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_FRONTEND_URL: ${NEXT_PUBLIC_FRONTEND_URL}
+        DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+        VALKEY_PASSWORD: ${VALKEY_PASSWORD:-}
+        VALKEY_HOST: ${VALKEY_HOST:-valkey}
+        VALKEY_PORT: ${VALKEY_PORT:-6379}
+    image: question-app:latest
+    command: ["npm", "run", "start"]
+    environment:
+      NODE_ENV: production
+    ports:
+      - "3000:3001"
+      - "6001:6002"
+    depends_on:
+      server:
+        condition: service_started
+    restart: always
+    networks:
+      - app_network
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/question_app
+      VALKEY_HOST: valkey
+      VALKEY_PORT: 6379
+      VALKEY_PASSWORD: ${VALKEY_PASSWORD:-}
+    ports:
+      - "6001:6001" 
+    depends_on:
+      db:
+        condition: service_healthy
+      valkey:
+        condition: service_healthy
+    restart: always
+    networks:
+      - app_network
+
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: eguzozieonyekachi@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app_network
+
+  valkey:
+    image: valkey/valkey:8.0
+    command: ["valkey-server", "--appendonly", "yes", "--port", "6379"]
+    volumes:
+      - valkey_data:/data
+    expose:
+      - "6379"
+    healthcheck:
+      test: ["CMD", "valkey-cli", "-p", "6379", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: always
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  db_data:
+  valkey_data:

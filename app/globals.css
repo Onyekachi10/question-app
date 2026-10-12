@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+:root {
+  --font-serif: var(--font-serif), 'Playfair Display', Georgia, serif;
+  --font-sans: var(--font-sans), 'Inter', -apple-system, sans-serif;
+
+  /* Loveweb warm organic palette */
+  --bg-gradient-top: hsl(30, 30%, 96%);
+  --bg-gradient-mid: hsl(30, 25%, 93%);
+  --bg-gradient-bot: hsl(28, 22%, 88%);
+  
+  --ink-primary: hsl(20, 25%, 22%);
+  --ink-body: hsl(20, 20%, 30%);
+  --ink-muted: hsl(20, 15%, 48%);
+  --ink-faint: hsl(20, 12%, 68%);
+
+  --paper-card: rgba(255, 255, 255, 0.72);
+  --paper-card-subtle: rgba(255, 255, 255, 0.45);
+  --paper-border: rgba(79, 63, 53, 0.12);
+  --paper-border-hover: rgba(79, 63, 53, 0.28);
+  --accent-warm: hsl(20, 35%, 42%);
+  --accent-warm-light: hsl(20, 45%, 94%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    hsl(30, 30%, 96%) 0%,
+    hsl(30, 25%, 93%) 50%,
+    hsl(28, 22%, 88%) 100%
+  );
+  background-attachment: fixed;
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Editorial Serif & Display styles */
+.font-editorial {
+  font-family: var(--font-serif);
+}
+
+/* Warm paper card aesthetic */
+.paper-panel {
+  background: var(--paper-card);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--paper-border);
+  border-radius: 1.5rem;
+  box-shadow: 
+    0 10px 30px -10px rgba(60, 45, 35, 0.06),
+    0 2px 6px -1px rgba(60, 45, 35, 0.03);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.paper-panel:hover {
+  border-color: var(--paper-border-hover);
+  box-shadow: 
+    0 16px 40px -12px rgba(60, 45, 35, 0.1),
+    0 4px 10px -2px rgba(60, 45, 35, 0.05);
+}
+
+/* Loveweb Signature Pill Button */
+.btn-loveweb {
+  position: relative;
+  overflow: hidden;
+  border-radius: 9999px;
+  border: 1px solid rgba(79, 63, 53, 0.22);
+  background: rgba(79, 63, 53, 0.05);
+  color: hsl(20, 25%, 26%);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 0.75rem 2rem;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-loveweb:hover:not(:disabled) {
+  border-color: hsl(20, 25%, 26%);
+  background: hsl(20, 25%, 26%);
+  color: hsl(30, 30%, 97%);
+  box-shadow: 0 8px 25px -5px rgba(79, 63, 53, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-loveweb:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-loveweb-secondary {
+  border-radius: 9999px;
+  border: 1px solid rgba(79, 63, 53, 0.12);
+  background: rgba(255, 255, 255, 0.5);
+  color: hsl(20, 20%, 35%);
+  font-family: var(--font-sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  padding: 0.6rem 1.4rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+
+.btn-loveweb-secondary:hover:not(:disabled) {
+  border-color: rgba(79, 63, 53, 0.3);
+  background: rgba(255, 255, 255, 0.85);
+  color: hsl(20, 25%, 22%);
+}
+
+/* Warm Input & Textarea */
+.loveweb-input {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(79, 63, 53, 0.15);
+  color: hsl(20, 25%, 22%);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+  font-family: var(--font-sans);
+}
+
+.loveweb-input:focus {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: hsl(20, 30%, 40%);
+  box-shadow: 0 0 0 3px rgba(79, 63, 53, 0.08);
+}
+
+.loveweb-input::placeholder {
+  color: hsl(20, 12%, 65%);
+}
+
+/* Delicate subtle animations */
+@keyframes warm-float {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-8px);
+    opacity: 0.55;
+  }
+}
+
+.animate-warm-float {
+  animation: warm-float 4.5s ease-in-out infinite;
+}
+
+@keyframes gentle-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-gentle-enter {
+  animation: gentle-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Subtle scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(79, 63, 53, 0.18);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(79, 63, 53, 0.35);
+}
