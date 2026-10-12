@@ -83,6 +83,8 @@ services:
     command: ["valkey-server", "--appendonly", "yes", "--port", "6379"]
     volumes:
       - valkey_data:/data
+    ports:
+      - "${VALKEY_PORT:-6379}:6379"
     expose:
       - "6379"
     healthcheck:
